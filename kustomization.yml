@@ -1,0 +1,16 @@
+bases:
+- apps/cert-manager/
+- apps/cluster-autoscaler/
+- apps/external-dns/
+- apps/github-authn/
+- apps/postgres-operator/
+- apps/ridecell-operator/
+- apps/traefik/
+
+images:
+- name: k8s.gcr.io/cluster-autoscaler
+- name: quay.io/jetstack/cert-manager-controller
+- name: registry.opensource.zalan.do/acid/postgres-operator
+- name: traefik
+- name: us.gcr.io/ridecell-1/ridecell-operator
+- name: us.gcr.io/ridecell-public/kubernetes-github-authn
