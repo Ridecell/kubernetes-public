@@ -62,6 +62,21 @@ spec:
           secretName: github-authn
 ---
 apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: github-authn-ca
+  namespace: kube-system
+spec:
+  secretName: github-authn-ca
+  issuerRef:
+    name: selfsigned
+    kind: ClusterIssuer
+  commonName: github-authn-ca
+  dnsNames: [github-authn-ca]
+  isCA: true
+  duration: 876000h
+---
+apiVersion: certmanager.k8s.io/v1alpha1
 kind: Issuer
 metadata:
   name: github-authn
@@ -69,16 +84,6 @@ metadata:
 spec:
   ca:
     secretName: github-authn-ca
----
-# apiVersion: v1
-# kind: Secret
-# metadata:
-#   name: github-authn-ca
-#   namespace: kube-system
-# type: Opaque
-# stringData:
-#   tls.crt:
-#   tls.key:
 ---
 apiVersion: certmanager.k8s.io/v1alpha1
 kind: Certificate
