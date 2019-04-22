@@ -1,0 +1,97 @@
+#
+# Copyright 2019, Ridecell, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: github-authn
+  namespace: kube-system
+  labels:
+    k8s-app: github-authn
+spec:
+  selector:
+    matchLabels:
+      k8s-app: github-authn
+  updateStrategy:
+    # This is the default in newer Kubernetes but not in 1.11.
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        k8s-app: github-authn
+      annotations:
+        scheduler.alpha.kubernetes.io/critical-pod: ""
+    spec:
+      containers:
+      - name: default
+        image: us.gcr.io/ridecell-public/kubernetes-github-authn:fe1a59c
+        env:
+        - name: REQUIRED_ORG
+          value: Ridecell
+        ports:
+        - containerPort: 3000
+          hostPort: 3000
+          protocol: TCP
+        volumeMounts:
+        - name: tls
+          mountPath: /etc/ssl/webhook
+          readOnly: true
+      hostNetwork: true
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      nodeSelector:
+        node-role.kubernetes.io/master: ""
+      restartPolicy: Always
+      volumes:
+      - name: tls
+        secret:
+          secretName: github-authn
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  name: github-authn
+  namespace: kube-system
+spec:
+  ca:
+    secretName: github-authn-ca
+---
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: github-authn-ca
+#   namespace: kube-system
+# type: Opaque
+# stringData:
+#   tls.crt:
+#   tls.key:
+---
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: github-authn
+  namespace: kube-system
+spec:
+  secretName: github-authn
+  issuerRef:
+    name: github-authn
+    kind: Issuer
+  commonName: localhost
+  dnsNames: [localhost]
+  duration: 24h
+  renewBefore: 12h
+---

@@ -1,0 +1,3 @@
+resources:
+- ridecell-operator.yml
+- crds.yml

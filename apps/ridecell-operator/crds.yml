@@ -1,0 +1,907 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: iamusers.aws.ridecell.io
+spec:
+  group: aws.ridecell.io
+  names:
+    kind: IAMUser
+    plural: iamusers
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            inlinePolicies:
+              type: object
+            permissionsBoundaryArn:
+              type: string
+            username:
+              type: string
+          required:
+          - permissionsBoundaryArn
+          type: object
+        status:
+          properties:
+            message:
+              type: string
+            status:
+              type: string
+          required:
+          - status
+          - message
+          type: object
+  version: v1beta1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: s3buckets.aws.ridecell.io
+spec:
+  group: aws.ridecell.io
+  names:
+    kind: S3Bucket
+    plural: s3buckets
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            bucketName:
+              type: string
+            bucketPolicy:
+              type: string
+            region:
+              type: string
+          type: object
+        status:
+          properties:
+            message:
+              type: string
+            status:
+              type: string
+          required:
+          - status
+          - message
+          type: object
+  version: v1beta1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: djangousers.db.ridecell.io
+spec:
+  group: db.ridecell.io
+  names:
+    kind: DjangoUser
+    plural: djangousers
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            active:
+              type: boolean
+            database:
+              properties:
+                database:
+                  type: string
+                host:
+                  type: string
+                passwordSecretRef:
+                  properties:
+                    key:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - name
+                  type: object
+                port:
+                  type: uint16
+                username:
+                  type: string
+              required:
+              - host
+              - username
+              - passwordSecretRef
+              type: object
+            dispatcher:
+              type: boolean
+            email:
+              type: string
+            firstName:
+              type: string
+            lastName:
+              type: string
+            manager:
+              type: boolean
+            passwordSecret:
+              type: string
+            staff:
+              type: boolean
+            superuser:
+              type: boolean
+          required:
+          - email
+          - database
+          - active
+          - manager
+          - dispatcher
+          - staff
+          - superuser
+          type: object
+        status:
+          properties:
+            message:
+              type: string
+            status:
+              type: string
+          required:
+          - status
+          - message
+          type: object
+  version: v1beta1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: postgresextensions.db.ridecell.io
+spec:
+  group: db.ridecell.io
+  names:
+    kind: PostgresExtension
+    plural: postgresextensions
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            database:
+              properties:
+                database:
+                  type: string
+                host:
+                  type: string
+                passwordSecretRef:
+                  properties:
+                    key:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - name
+                  type: object
+                port:
+                  type: uint16
+                username:
+                  type: string
+              required:
+              - host
+              - username
+              - passwordSecretRef
+              type: object
+            extensionName:
+              type: string
+            version:
+              type: string
+          required:
+          - database
+          type: object
+        status:
+          properties:
+            message:
+              type: string
+            status:
+              type: string
+          required:
+          - status
+          - message
+          type: object
+  version: v1beta1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: postgresoperatordatabases.db.ridecell.io
+spec:
+  group: db.ridecell.io
+  names:
+    kind: PostgresOperatorDatabase
+    plural: postgresoperatordatabases
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            database:
+              type: string
+            databaseRef:
+              properties:
+                name:
+                  type: string
+              required:
+              - name
+              type: object
+          required:
+          - database
+          - databaseRef
+          type: object
+        status:
+          properties:
+            message:
+              type: string
+            status:
+              type: string
+          required:
+          - status
+          - message
+          type: object
+      required:
+      - spec
+  version: v1beta1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: rabbitmqusers.db.ridecell.io
+spec:
+  group: db.ridecell.io
+  names:
+    kind: RabbitmqUser
+    plural: rabbitmqusers
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            connection:
+              description: TODO TopicPermissions
+              type: object
+            permissions:
+              items:
+                properties:
+                  configure:
+                    description: Configuration permissions.
+                    type: string
+                  read:
+                    description: Read permissions.
+                    type: string
+                  vhost:
+                    description: Vhost this applies to.
+                    type: string
+                  write:
+                    description: Write permissions.
+                    type: string
+                required:
+                - vhost
+                - configure
+                - write
+                - read
+                type: object
+              type: array
+            tags:
+              type: string
+            username:
+              type: string
+          required:
+          - username
+          type: object
+        status:
+          properties:
+            connection:
+              properties:
+                host:
+                  type: string
+                passwordSecretRef:
+                  properties:
+                    key:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - name
+                  type: object
+                port:
+                  format: int64
+                  type: integer
+                username:
+                  type: string
+                vhost:
+                  type: string
+              required:
+              - host
+              - username
+              - passwordSecretRef
+              type: object
+            message:
+              type: string
+            status:
+              type: string
+          required:
+          - status
+          - message
+          type: object
+  version: v1beta1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: rabbitmqvhosts.db.ridecell.io
+spec:
+  group: db.ridecell.io
+  names:
+    kind: RabbitmqVhost
+    plural: rabbitmqvhosts
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            connection:
+              properties:
+                host:
+                  type: string
+                insecureSkip:
+                  type: boolean
+                passwordSecretRef:
+                  properties:
+                    key:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - name
+                  type: object
+                username:
+                  type: string
+              required:
+              - username
+              - passwordSecretRef
+              - host
+              type: object
+            vhostName:
+              type: string
+          required:
+          - connection
+          type: object
+        status:
+          properties:
+            message:
+              type: string
+            status:
+              type: string
+          required:
+          - status
+          - message
+          type: object
+  version: v1beta1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: encryptedsecrets.secrets.ridecell.io
+spec:
+  group: secrets.ridecell.io
+  names:
+    kind: EncryptedSecret
+    plural: encryptedsecrets
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        data:
+          type: object
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        status:
+          properties:
+            message:
+              type: string
+            status:
+              type: string
+          required:
+          - status
+          - message
+          type: object
+  version: v1beta1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: pullsecrets.secrets.ridecell.io
+spec:
+  group: secrets.ridecell.io
+  names:
+    kind: PullSecret
+    plural: pullsecrets
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            pullSecretName:
+              description: 'Important: Run "make" to regenerate code after modifying
+                this file Name of the secret to use for image pulls. Defaults to `"pull-secret"`.'
+              type: string
+          type: object
+        status:
+          properties:
+            message:
+              description: Message related to the current status.
+              type: string
+            status:
+              description: Overall object status
+              type: string
+          type: object
+  version: v1beta1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: djangousers.summon.ridecell.io
+spec:
+  group: summon.ridecell.io
+  names:
+    kind: DjangoUser
+    plural: djangousers
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            active:
+              type: boolean
+            database:
+              properties:
+                database:
+                  type: string
+                host:
+                  type: string
+                passwordSecretRef:
+                  properties:
+                    key:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - name
+                  type: object
+                port:
+                  type: uint16
+                username:
+                  type: string
+              required:
+              - host
+              - username
+              - passwordSecretRef
+              type: object
+            dispatcher:
+              type: boolean
+            email:
+              type: string
+            firstName:
+              type: string
+            lastName:
+              type: string
+            manager:
+              type: boolean
+            staff:
+              type: boolean
+            superuser:
+              type: boolean
+          required:
+          - email
+          - database
+          - active
+          - manager
+          - dispatcher
+          - staff
+          - superuser
+          type: object
+        status:
+          properties:
+            message:
+              type: string
+            status:
+              type: string
+          required:
+          - status
+          - message
+          type: object
+  version: v1beta1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: summonplatforms.summon.ridecell.io
+spec:
+  group: summon.ridecell.io
+  names:
+    kind: SummonPlatform
+    plural: summonplatforms
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            awsRegion:
+              description: AWS Region setting
+              type: string
+            channelWorkerReplicas:
+              description: Number of channelworker pods to run. Defaults to 1.
+              format: int32
+              type: integer
+            config:
+              description: Summon-platform.yml configuration options.
+              type: object
+            daphneReplicas:
+              description: Number of daphne pods to run. Defaults to 1.
+              format: int32
+              type: integer
+            database:
+              description: Database-related settings.
+              properties:
+                exclusiveDatabase:
+                  type: boolean
+                sharedDatabaseName:
+                  type: string
+              type: object
+            fernetKeyLifetime:
+              description: Fernet Key Rotation Time Setting
+              format: int64
+              type: integer
+            flavor:
+              description: The flavor of data to be imported upon creation
+              type: string
+            hostname:
+              description: Hostname to use for the instance. Defaults to $NAME.ridecell.us.
+              type: string
+            miv:
+              description: Manual Identity Verification settings.
+              properties:
+                existingBucket:
+                  description: The optional name of an existing S3 bucket to use.
+                    If set, this code does not create its own bucket.
+                  type: string
+              type: object
+            noCreateSuperuser:
+              description: Disable the creation of the dispatcher@ridecell.com superuser.
+              type: boolean
+            notifications:
+              description: Settings for deploy and error notifications.
+              properties:
+                slackChannel:
+                  description: Name of the slack channel for notifications. If not
+                    set, no notifications will be sent.
+                  type: string
+              type: object
+            pullSecret:
+              description: Name of the secret to use for image pulls. Defaults to
+                `"pull-secret"`.
+              type: string
+            secrets:
+              description: Name of the secret to use for secret values.
+              items:
+                type: string
+              type: array
+            sqsQueue:
+              description: SQS queue setting
+              type: string
+            staticReplicas:
+              description: Number of caddy pods to run. Defaults to 1.
+              format: int32
+              type: integer
+            version:
+              description: Summon image version to deploy.
+              type: string
+            webReplicas:
+              description: Number of gunicorn pods to run. Defaults to 1.
+              format: int32
+              type: integer
+            workerReplicas:
+              description: Number of celeryd pods to run. Defaults to 1.
+              format: int32
+              type: integer
+          required:
+          - version
+          type: object
+        status:
+          properties:
+            message:
+              description: Message related to the current status.
+              type: string
+            migrateVersion:
+              description: Previous version for which migrations ran successfully.
+              type: string
+            miv:
+              description: Status for MIV system.
+              properties:
+                bucket:
+                  description: The MIV data S3 bucket name.
+                  type: string
+              type: object
+            notification:
+              description: Spec for Notification
+              properties:
+                notifyVersion:
+                  description: The last version we posted a deploy success notification
+                    for.
+                  type: string
+              type: object
+            postgresExtensionStatus:
+              description: Status of the required Postgres extensions (collectively).
+              type: string
+            postgresStatus:
+              description: Current Postgresql status if one exists.
+              type: string
+            pullSecretStatus:
+              description: Status of the pull secret.
+              type: string
+            status:
+              description: Overall object status
+              type: string
+          type: object
+  version: v1beta1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
