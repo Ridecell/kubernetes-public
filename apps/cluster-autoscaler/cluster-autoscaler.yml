@@ -136,9 +136,13 @@ spec:
         - --logtostderr=true
         env:
         - name: AWS_REGION
-          value: us-west-2
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['ridecell.io/cloud-region']
         - name: CLUSTER_NAME
-          value: base
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['ridecell.io/cluster-name']
         livenessProbe:
           httpGet:
             path: /health-check
