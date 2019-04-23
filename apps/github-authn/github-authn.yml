@@ -37,7 +37,7 @@ spec:
     spec:
       containers:
       - name: default
-        image: us.gcr.io/ridecell-public/kubernetes-github-authn:7c6b6f1
+        image: us.gcr.io/ridecell-public/kubernetes-github-authn:1a8d21d
         env:
         - name: REQUIRED_ORG
           value: Ridecell
