@@ -105,9 +105,6 @@ metadata:
 spec:
   selector:
     app: postgres-operator
-spec:
-  selector:
-    app: postgres-operator
   ports:
   - protocol: TCP
     port: 65535
