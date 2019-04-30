@@ -2,3 +2,4 @@ resources:
 - cert-manager.yml
 - crd.yml
 - letsencrypt.yml
+- selfsigned.yml
