@@ -62,6 +62,7 @@ data:
   traefik.toml: |
     defaultEntryPoints = ["http","https"]
     logLevel = "INFO"
+    insecureSkipVerify = true
 
     [entryPoints.http]
     address = ":8080"
