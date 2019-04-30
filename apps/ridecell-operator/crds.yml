@@ -120,6 +120,249 @@ metadata:
   creationTimestamp: null
   labels:
     controller-tools.k8s.io: "1.0"
+  name: dbconfigs.db.ridecell.io
+spec:
+  group: db.ridecell.io
+  names:
+    kind: DbConfig
+    plural: dbconfigs
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            postgres:
+              properties:
+                local:
+                  properties:
+                    allowedSourceRanges:
+                      description: load balancers' source ranges are the same for
+                        master and replica services
+                      items:
+                        type: string
+                      type: array
+                    clone:
+                      properties:
+                        cluster:
+                          type: string
+                        timestamp:
+                          type: string
+                        uid:
+                          type: string
+                      type: object
+                    databases:
+                      type: object
+                    dockerImage:
+                      type: string
+                    enableMasterLoadBalancer:
+                      description: vars that enable load balancers are pointers because
+                        it is important to know if any of them is omitted from the
+                        Postgres manifest in that case the var evaluates to nil and
+                        the value is taken from the operator config
+                      type: boolean
+                    enableReplicaLoadBalancer:
+                      type: boolean
+                    enableShmVolume:
+                      type: boolean
+                    maintenanceWindows:
+                      items:
+                        type: object
+                      type: array
+                    resources:
+                      description: Patroni         postgresv1.Patroni         `json:"patroni,omitempty"`
+                      properties:
+                        limits:
+                          properties:
+                            cpu:
+                              type: string
+                            memory:
+                              type: string
+                          required:
+                          - cpu
+                          - memory
+                          type: object
+                        requests:
+                          properties:
+                            cpu:
+                              type: string
+                            memory:
+                              type: string
+                          required:
+                          - cpu
+                          - memory
+                          type: object
+                      type: object
+                    sidecars:
+                      items:
+                        properties:
+                          env:
+                            items:
+                              type: object
+                            type: array
+                          image:
+                            type: string
+                          name:
+                            type: string
+                          ports:
+                            items:
+                              type: object
+                            type: array
+                          resources:
+                            properties:
+                              limits:
+                                properties:
+                                  cpu:
+                                    type: string
+                                  memory:
+                                    type: string
+                                required:
+                                - cpu
+                                - memory
+                                type: object
+                              requests:
+                                properties:
+                                  cpu:
+                                    type: string
+                                  memory:
+                                    type: string
+                                required:
+                                - cpu
+                                - memory
+                                type: object
+                            type: object
+                        type: object
+                      type: array
+                    tolerations:
+                      items:
+                        type: object
+                      type: array
+                    users:
+                      type: object
+                    volume:
+                      description: PostgresqlParam postgresv1.PostgresqlParam `json:"postgresql,omitempty"`
+                      properties:
+                        size:
+                          type: string
+                        storageClass:
+                          type: string
+                      required:
+                      - size
+                      - storageClass
+                      type: object
+                  type: object
+                mode:
+                  enum:
+                  - Exclusive
+                  - Shared
+                  type: string
+                rds:
+                  properties:
+                    allocatedStorage:
+                      format: int64
+                      type: integer
+                    engine:
+                      type: string
+                    engineVersion:
+                      type: string
+                    instanceClass:
+                      type: string
+                    maintenanceWindow:
+                      pattern: \D*:\d{2}:\d{2}-\D*:\d{2}:\d{2}
+                      type: string
+                    multiAZ:
+                      type: boolean
+                    parameterOverrides:
+                      type: object
+                    subnetGroupName:
+                      type: string
+                    username:
+                      type: string
+                    vpcID:
+                      type: string
+                  required:
+                  - maintenanceWindow
+                  type: object
+              required:
+              - mode
+              type: object
+          required:
+          - postgres
+          type: object
+        status:
+          properties:
+            message:
+              type: string
+            postgres:
+              properties:
+                connection:
+                  properties:
+                    database:
+                      type: string
+                    host:
+                      type: string
+                    passwordSecretRef:
+                      properties:
+                        key:
+                          type: string
+                        name:
+                          type: string
+                      required:
+                      - name
+                      type: object
+                    port:
+                      format: int64
+                      type: integer
+                    sslmode:
+                      type: string
+                    username:
+                      type: string
+                  required:
+                  - host
+                  - username
+                  - passwordSecretRef
+                  type: object
+                status:
+                  type: string
+              required:
+              - status
+              - connection
+              type: object
+            status:
+              type: string
+          required:
+          - status
+          - message
+          - postgres
+          type: object
+  version: v1beta1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
   name: djangousers.db.ridecell.io
 spec:
   group: db.ridecell.io
@@ -221,6 +464,134 @@ metadata:
   creationTimestamp: null
   labels:
     controller-tools.k8s.io: "1.0"
+  name: postgresdatabases.db.ridecell.io
+spec:
+  group: db.ridecell.io
+  names:
+    kind: PostgresDatabase
+    plural: postgresdatabases
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            databaseName:
+              description: Name of the database to create. Defaults the same name
+                as the PostgresDatabase object.
+              type: string
+            dbConfig:
+              description: An optional name of a DbConfig object in this namespace
+                to use for configuration. Defaults to the name of the namespace.
+              type: string
+            owner:
+              description: Name of the user to own this database. Defaults to a user
+                with the same name as `DatabaseName`.
+              type: string
+            skipUser:
+              description: If enabled, do not automatically create the owner user.
+              type: boolean
+          type: object
+        status:
+          properties:
+            adminConnection:
+              properties:
+                database:
+                  type: string
+                host:
+                  type: string
+                passwordSecretRef:
+                  properties:
+                    key:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - name
+                  type: object
+                port:
+                  format: int64
+                  type: integer
+                sslmode:
+                  type: string
+                username:
+                  type: string
+              required:
+              - host
+              - username
+              - passwordSecretRef
+              type: object
+            connection:
+              properties:
+                database:
+                  type: string
+                host:
+                  type: string
+                passwordSecretRef:
+                  properties:
+                    key:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - name
+                  type: object
+                port:
+                  format: int64
+                  type: integer
+                sslmode:
+                  type: string
+                username:
+                  type: string
+              required:
+              - host
+              - username
+              - passwordSecretRef
+              type: object
+            databaseStatus:
+              type: string
+            message:
+              type: string
+            status:
+              type: string
+            userStatus:
+              type: string
+          required:
+          - status
+          - message
+          - databaseStatus
+          - userStatus
+          - connection
+          - adminConnection
+          type: object
+  version: v1beta1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
   name: postgresextensions.db.ridecell.io
 spec:
   group: db.ridecell.io
@@ -263,7 +634,10 @@ spec:
                   - name
                   type: object
                 port:
-                  type: uint16
+                  format: int64
+                  type: integer
+                sslmode:
+                  type: string
                 username:
                   type: string
               required:
@@ -350,6 +724,118 @@ spec:
           required:
           - status
           - message
+          type: object
+      required:
+      - spec
+  version: v1beta1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
+  name: postgresusers.db.ridecell.io
+spec:
+  group: db.ridecell.io
+  names:
+    kind: PostgresUser
+    plural: postgresusers
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            connection:
+              properties:
+                database:
+                  type: string
+                host:
+                  type: string
+                passwordSecretRef:
+                  properties:
+                    key:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - name
+                  type: object
+                port:
+                  format: int64
+                  type: integer
+                sslmode:
+                  type: string
+                username:
+                  type: string
+              required:
+              - host
+              - username
+              - passwordSecretRef
+              type: object
+            username:
+              type: string
+          required:
+          - connection
+          type: object
+        status:
+          properties:
+            connection:
+              properties:
+                database:
+                  type: string
+                host:
+                  type: string
+                passwordSecretRef:
+                  properties:
+                    key:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - name
+                  type: object
+                port:
+                  format: int64
+                  type: integer
+                sslmode:
+                  type: string
+                username:
+                  type: string
+              required:
+              - host
+              - username
+              - passwordSecretRef
+              type: object
+            message:
+              type: string
+            status:
+              type: string
+          required:
+          - status
+          - message
+          - connection
           type: object
       required:
       - spec
@@ -551,6 +1037,115 @@ metadata:
   creationTimestamp: null
   labels:
     controller-tools.k8s.io: "1.0"
+  name: rdsinstances.db.ridecell.io
+spec:
+  group: db.ridecell.io
+  names:
+    kind: RDSInstance
+    plural: rdsinstances
+  scope: Namespaced
+  subresources:
+    status: {}
+  validation:
+    openAPIV3Schema:
+      properties:
+        apiVersion:
+          description: 'APIVersion defines the versioned schema of this representation
+            of an object. Servers should convert recognized schemas to the latest
+            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
+          type: string
+        kind:
+          description: 'Kind is a string value representing the REST resource this
+            object represents. Servers may infer this from the endpoint the client
+            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
+          type: string
+        metadata:
+          type: object
+        spec:
+          properties:
+            allocatedStorage:
+              format: int64
+              type: integer
+            engine:
+              type: string
+            engineVersion:
+              type: string
+            instanceClass:
+              type: string
+            maintenanceWindow:
+              pattern: \D*:\d{2}:\d{2}-\D*:\d{2}:\d{2}
+              type: string
+            multiAZ:
+              type: boolean
+            parameterOverrides:
+              type: object
+            subnetGroupName:
+              type: string
+            username:
+              type: string
+            vpcID:
+              type: string
+          required:
+          - maintenanceWindow
+          type: object
+        status:
+          properties:
+            instanceID:
+              type: string
+            message:
+              type: string
+            rdsConnection:
+              properties:
+                database:
+                  type: string
+                host:
+                  type: string
+                passwordSecretRef:
+                  properties:
+                    key:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - name
+                  type: object
+                port:
+                  format: int64
+                  type: integer
+                sslmode:
+                  type: string
+                username:
+                  type: string
+              required:
+              - host
+              - username
+              - passwordSecretRef
+              type: object
+            securityGroupID:
+              type: string
+            status:
+              type: string
+          required:
+          - status
+          - message
+          - rdsConnection
+          - instanceID
+          - securityGroupID
+          type: object
+  version: v1beta1
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  creationTimestamp: null
+  labels:
+    controller-tools.k8s.io: "1.0"
   name: encryptedsecrets.secrets.ridecell.io
 spec:
   group: secrets.ridecell.io
@@ -699,7 +1294,10 @@ spec:
                   - name
                   type: object
                 port:
-                  type: uint16
+                  format: int64
+                  type: integer
+                sslmode:
+                  type: string
                 username:
                   type: string
               required:
@@ -802,6 +1400,9 @@ spec:
                 sharedDatabaseName:
                   type: string
               type: object
+            environment:
+              description: Environment setting.
+              type: string
             fernetKeyLifetime:
               description: Fernet Key Rotation Time Setting
               format: int64
@@ -884,11 +1485,38 @@ spec:
                     for.
                   type: string
               type: object
+            postgresConnection:
+              properties:
+                database:
+                  type: string
+                host:
+                  type: string
+                passwordSecretRef:
+                  properties:
+                    key:
+                      type: string
+                    name:
+                      type: string
+                  required:
+                  - name
+                  type: object
+                port:
+                  format: int64
+                  type: integer
+                sslmode:
+                  type: string
+                username:
+                  type: string
+              required:
+              - host
+              - username
+              - passwordSecretRef
+              type: object
             postgresExtensionStatus:
               description: Status of the required Postgres extensions (collectively).
               type: string
             postgresStatus:
-              description: Current Postgresql status if one exists.
+              description: Current PostgresDatabase status if one exists.
               type: string
             pullSecretStatus:
               description: Status of the pull secret.
