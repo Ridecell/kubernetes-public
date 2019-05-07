@@ -183,6 +183,15 @@ spec:
                       items:
                         type: object
                       type: array
+                    postgresql:
+                      properties:
+                        parameters:
+                          type: object
+                        version:
+                          type: string
+                      required:
+                      - version
+                      type: object
                     resources:
                       description: Patroni         postgresv1.Patroni         `json:"patroni,omitempty"`
                       properties:
@@ -254,7 +263,6 @@ spec:
                     users:
                       type: object
                     volume:
-                      description: PostgresqlParam postgresv1.PostgresqlParam `json:"postgresql,omitempty"`
                       properties:
                         size:
                           type: string
@@ -363,107 +371,6 @@ metadata:
   creationTimestamp: null
   labels:
     controller-tools.k8s.io: "1.0"
-  name: djangousers.db.ridecell.io
-spec:
-  group: db.ridecell.io
-  names:
-    kind: DjangoUser
-    plural: djangousers
-  scope: Namespaced
-  subresources:
-    status: {}
-  validation:
-    openAPIV3Schema:
-      properties:
-        apiVersion:
-          description: 'APIVersion defines the versioned schema of this representation
-            of an object. Servers should convert recognized schemas to the latest
-            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
-          type: string
-        kind:
-          description: 'Kind is a string value representing the REST resource this
-            object represents. Servers may infer this from the endpoint the client
-            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
-          type: string
-        metadata:
-          type: object
-        spec:
-          properties:
-            active:
-              type: boolean
-            database:
-              properties:
-                database:
-                  type: string
-                host:
-                  type: string
-                passwordSecretRef:
-                  properties:
-                    key:
-                      type: string
-                    name:
-                      type: string
-                  required:
-                  - name
-                  type: object
-                port:
-                  type: uint16
-                username:
-                  type: string
-              required:
-              - host
-              - username
-              - passwordSecretRef
-              type: object
-            dispatcher:
-              type: boolean
-            email:
-              type: string
-            firstName:
-              type: string
-            lastName:
-              type: string
-            manager:
-              type: boolean
-            passwordSecret:
-              type: string
-            staff:
-              type: boolean
-            superuser:
-              type: boolean
-          required:
-          - email
-          - database
-          - active
-          - manager
-          - dispatcher
-          - staff
-          - superuser
-          type: object
-        status:
-          properties:
-            message:
-              type: string
-            status:
-              type: string
-          required:
-          - status
-          - message
-          type: object
-  version: v1beta1
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
----
-apiVersion: apiextensions.k8s.io/v1beta1
-kind: CustomResourceDefinition
-metadata:
-  creationTimestamp: null
-  labels:
-    controller-tools.k8s.io: "1.0"
   name: postgresdatabases.db.ridecell.io
 spec:
   group: db.ridecell.io
@@ -498,6 +405,10 @@ spec:
               description: An optional name of a DbConfig object in this namespace
                 to use for configuration. Defaults to the name of the namespace.
               type: string
+            extensions:
+              description: A map of extensions to versions to install. If the version
+                is "" then the latest version will be used.
+              type: object
             owner:
               description: Name of the user to own this database. Defaults to a user
                 with the same name as `DatabaseName`.
@@ -564,6 +475,8 @@ spec:
               type: object
             databaseStatus:
               type: string
+            extensionStatus:
+              type: object
             message:
               type: string
             status:
@@ -574,6 +487,7 @@ spec:
           - status
           - message
           - databaseStatus
+          - extensionStatus
           - userStatus
           - connection
           - adminConnection
@@ -839,113 +753,6 @@ spec:
           type: object
       required:
       - spec
-  version: v1beta1
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
----
-apiVersion: apiextensions.k8s.io/v1beta1
-kind: CustomResourceDefinition
-metadata:
-  creationTimestamp: null
-  labels:
-    controller-tools.k8s.io: "1.0"
-  name: rabbitmqusers.db.ridecell.io
-spec:
-  group: db.ridecell.io
-  names:
-    kind: RabbitmqUser
-    plural: rabbitmqusers
-  scope: Namespaced
-  subresources:
-    status: {}
-  validation:
-    openAPIV3Schema:
-      properties:
-        apiVersion:
-          description: 'APIVersion defines the versioned schema of this representation
-            of an object. Servers should convert recognized schemas to the latest
-            internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#resources'
-          type: string
-        kind:
-          description: 'Kind is a string value representing the REST resource this
-            object represents. Servers may infer this from the endpoint the client
-            submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#types-kinds'
-          type: string
-        metadata:
-          type: object
-        spec:
-          properties:
-            connection:
-              description: TODO TopicPermissions
-              type: object
-            permissions:
-              items:
-                properties:
-                  configure:
-                    description: Configuration permissions.
-                    type: string
-                  read:
-                    description: Read permissions.
-                    type: string
-                  vhost:
-                    description: Vhost this applies to.
-                    type: string
-                  write:
-                    description: Write permissions.
-                    type: string
-                required:
-                - vhost
-                - configure
-                - write
-                - read
-                type: object
-              type: array
-            tags:
-              type: string
-            username:
-              type: string
-          required:
-          - username
-          type: object
-        status:
-          properties:
-            connection:
-              properties:
-                host:
-                  type: string
-                passwordSecretRef:
-                  properties:
-                    key:
-                      type: string
-                    name:
-                      type: string
-                  required:
-                  - name
-                  type: object
-                port:
-                  format: int64
-                  type: integer
-                username:
-                  type: string
-                vhost:
-                  type: string
-              required:
-              - host
-              - username
-              - passwordSecretRef
-              type: object
-            message:
-              type: string
-            status:
-              type: string
-          required:
-          - status
-          - message
-          type: object
   version: v1beta1
 status:
   acceptedNames:
@@ -1512,9 +1319,6 @@ spec:
               - username
               - passwordSecretRef
               type: object
-            postgresExtensionStatus:
-              description: Status of the required Postgres extensions (collectively).
-              type: string
             postgresStatus:
               description: Current PostgresDatabase status if one exists.
               type: string
