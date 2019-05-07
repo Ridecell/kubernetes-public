@@ -74,7 +74,7 @@ spec:
   commonName: github-authn-ca
   dnsNames: [github-authn-ca]
   isCA: true
-  duration: 876000h
+  duration: 876000h0m0s
 ---
 apiVersion: certmanager.k8s.io/v1alpha1
 kind: Issuer
@@ -97,6 +97,6 @@ spec:
     kind: Issuer
   commonName: localhost
   dnsNames: [localhost]
-  duration: 24h
-  renewBefore: 12h
+  duration: 24h0m0s
+  renewBefore: 12h0m0s
 ---
