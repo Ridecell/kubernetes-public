@@ -92,10 +92,10 @@ spec:
         command: [/ridecell-operator, -v, "4", -logtostderr]
         resources:
           limits:
-            memory: 100Mi
+            memory: 400Mi
           requests:
             cpu: 100m
-            memory: 50Mi
+            memory: 100Mi
         env:
           - name: SLACK_API_KEY
             valueFrom:
