@@ -121,6 +121,10 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.labels['ridecell.io/cloud-region']
+          - name: AWS_SUBNET_GROUP_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['ridecell.io/cluster-name']
       terminationGracePeriodSeconds: 10
 ---
 # apiVersion: v1
