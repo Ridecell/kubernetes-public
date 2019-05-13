@@ -88,7 +88,7 @@ spec:
       serviceAccountName: ridecell-operator
       containers:
       - name: default
-        image: us.gcr.io/ridecell-1/ridecell-operator:1207-ba4837b-master
+        image: us.gcr.io/ridecell-1/ridecell-operator:1221-a4ba6e4-master
         command: [/ridecell-operator, -v, "4", -logtostderr]
         resources:
           limits:
