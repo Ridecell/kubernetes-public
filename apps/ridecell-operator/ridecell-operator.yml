@@ -57,6 +57,9 @@ rules:
 - apiGroups: [secrets.ridecell.io, db.ridecell.io, aws.ridecell.io]
   resources: ["*"]
   verbs: ["*"]
+- apiGroups: [apiextensions.k8s.io]
+  resources: [customresourcedefinitions]
+  verbs: [get, list, create, update]
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
@@ -86,6 +89,16 @@ spec:
         app: ridecell-operator
     spec:
       serviceAccountName: ridecell-operator
+      initContainers:
+      - name: install-crds
+        image: us.gcr.io/ridecell-1/ridecell-operator:1421-d887e3a-master
+        command: [/install_crds, /crds, -v, "4", -logtostderr]
+        resources:
+          limits:
+            memory: 100Mi
+          requests:
+            cpu: 100m
+            memory: 50Mi
       containers:
       - name: default
         image: us.gcr.io/ridecell-1/ridecell-operator:1221-a4ba6e4-master
