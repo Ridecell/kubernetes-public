@@ -130,6 +130,11 @@ spec:
               secretKeyRef:
                 name: ridecell-operator
                 key: permissionsBoundaryArn
+          - name: RABBITMQ_URI
+            valueFrom:
+              secretKeyRef:
+                name: ridecell-operator
+                key: RABBITMQ_URI
           - name: AWS_REGION
             valueFrom:
               fieldRef:
