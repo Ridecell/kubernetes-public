@@ -101,7 +101,7 @@ spec:
             memory: 50Mi
       containers:
       - name: default
-        image: us.gcr.io/ridecell-1/ridecell-operator:1221-a4ba6e4-master
+        image: us.gcr.io/ridecell-1/ridecell-operator:1421-d887e3a-master
         command: [/ridecell-operator, -v, "4", -logtostderr]
         resources:
           limits:
