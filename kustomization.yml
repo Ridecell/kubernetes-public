@@ -3,6 +3,7 @@ bases:
 - apps/cluster-autoscaler/
 - apps/external-dns/
 - apps/github-authn/
+- apps/metrics-server/
 - apps/postgres-operator/
 - apps/ridecell-operator/
 - apps/traefik/

@@ -1,0 +1,4 @@
+bases:
+- github.com/coderanger/metrics-server//deploy/1.8+?ref=kustomization
+patches:
+- deployment.yml
