@@ -103,6 +103,7 @@ spec:
         image: registry.opensource.zalan.do/teapot/external-dns:v0.5.8
         imagePullPolicy: Always
         args:
+        - --interval=5m
         - --source=ingress
         - --domain-filter=ridecell.us
         - --domain-filter=ridecell.io
