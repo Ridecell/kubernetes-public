@@ -73,6 +73,9 @@ spec:
       - name: cert-manager
         image: quay.io/jetstack/cert-manager-controller:v0.7.0
         imagePullPolicy: IfNotPresent
+        ports:
+        - name: metrics
+          containerPort: 9402
         args:
         - --cluster-resource-namespace=$(POD_NAMESPACE)
         - --leader-election-namespace=$(POD_NAMESPACE)
@@ -100,3 +103,36 @@ spec:
     matchLabels:
       app: cert-manager
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cert-manager-metrics
+  namespace: cert-manager
+  labels:
+    app: cert-manager-metrics
+spec:
+  selector:
+    app: cert-manager
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 9402
+      targetPort: 9402
+      name: metrics
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: cert-manager
+  namespace: cert-manager
+  labels:
+    k8s-app: cert-manager
+    monitoredBy: prometheus-infra
+spec:
+  selector:
+    matchLabels:
+      app: cert-manager-metrics
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
