@@ -100,11 +100,8 @@ data:
     [kubernetes.ingressEndpoint]
     publishedService = "traefik/traefik"
 
-    [metrics]
-      [metrics.prometheus]
-        entryPoint = "traefik"
-        buckets = [0.1,0.3,1.2,5.0]
-
+    [metrics.prometheus]
+        
     [api]
 ---
 apiVersion: apps/v1
