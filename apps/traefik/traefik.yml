@@ -100,6 +100,11 @@ data:
     [kubernetes.ingressEndpoint]
     publishedService = "traefik/traefik"
 
+    [metrics]
+      [metrics.prometheus]
+        entryPoint = "traefik"
+        buckets = [0.1,0.3,1.2,5.0]
+
     [api]
 ---
 apiVersion: apps/v1
@@ -173,4 +178,36 @@ spec:
       port: 443
       targetPort: 8443
       name: https
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-admin
+  namespace: traefik
+  labels:
+    app: traefik-admin
+spec:
+  selector:
+    app: traefik
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 8888
+      targetPort: 8888
+      name: admin
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: traefik
+  namespace: traefik
+  labels:
+    k8s-app: traefik
+    monitoredBy: prometheus-infra
+spec:
+  selector:
+    matchLabels:
+      app: traefik-admin
+  endpoints:
+  - port: admin
+    interval: 30s
