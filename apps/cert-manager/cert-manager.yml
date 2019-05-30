@@ -113,10 +113,8 @@ metadata:
 spec:
   selector:
     app: cert-manager
-  type: ClusterIP
   ports:
-    - protocol: TCP
-      port: 9402
+    - port: 9402
       targetPort: 9402
       name: metrics
 ---
