@@ -102,6 +102,9 @@ spec:
       - name: default
         image: registry.opensource.zalan.do/teapot/external-dns:v0.5.8
         imagePullPolicy: Always
+        ports:
+        - name: metrics
+          containerPort: 7979
         args:
         - --interval=5m
         - --source=ingress
@@ -145,3 +148,34 @@ spec:
   # Workaround for https://github.com/kubernetes-sigs/kustomize/issues/677
   volumeClaimTemplates: []
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-dns-aws-metrics
+  namespace: external-dns
+  labels:
+    app: external-dns-aws-metrics
+spec:
+  selector:
+    app: external-dns-aws
+  ports:
+    - port: 7979
+      targetPort: 7979
+      name: metrics
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: external-dns-aws
+  namespace: external-dns
+  labels:
+    k8s-app: external-dns-aws
+    monitoredBy: prometheus-infra
+spec:
+  selector:
+    matchLabels:
+      app: external-dns-aws-metrics
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
