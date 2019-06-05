@@ -89,6 +89,8 @@ spec:
         app: ridecell-operator
     spec:
       serviceAccountName: ridecell-operator
+      imagePullSecrets:
+      - name: pull-secret
       initContainers:
       - name: install-crds
         image: us.gcr.io/ridecell-1/ridecell-operator:1584-922dc2f-master
