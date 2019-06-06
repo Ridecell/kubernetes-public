@@ -112,31 +112,6 @@ spec:
             cpu: 100m
             memory: 100Mi
         env:
-          - name: SLACK_API_KEY
-            valueFrom:
-              secretKeyRef:
-                name: ridecell-operator
-                key: slackApiKey
-          - name: AWS_ACCESS_KEY_ID
-            valueFrom:
-              secretKeyRef:
-                name: ridecell-operator
-                key: operatorAwsAccessKeyId
-          - name: AWS_SECRET_ACCESS_KEY
-            valueFrom:
-              secretKeyRef:
-                name: ridecell-operator
-                key: operatorAwsSecretAccessKey
-          - name: PERMISSIONS_BOUNDARY_ARN
-            valueFrom:
-              secretKeyRef:
-                name: ridecell-operator
-                key: permissionsBoundaryArn
-          - name: RABBITMQ_URI
-            valueFrom:
-              secretKeyRef:
-                name: ridecell-operator
-                key: RABBITMQ_URI
           - name: AWS_REGION
             valueFrom:
               fieldRef:
@@ -145,6 +120,9 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.labels['ridecell.io/cluster-name']
+        envFrom:
+        - secretRef:
+            name: ridecell-operator
       terminationGracePeriodSeconds: 10
 ---
 # apiVersion: v1
