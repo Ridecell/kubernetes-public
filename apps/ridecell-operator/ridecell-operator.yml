@@ -93,7 +93,7 @@ spec:
       - name: pull-secret
       initContainers:
       - name: install-crds
-        image: us.gcr.io/ridecell-1/ridecell-operator:1584-922dc2f-master
+        image: us.gcr.io/ridecell-1/ridecell-operator:2029-00e3d8a-master
         command: [/install_crds, /crds, -v, "4", -logtostderr]
         resources:
           limits:
@@ -103,7 +103,7 @@ spec:
             memory: 50Mi
       containers:
       - name: default
-        image: us.gcr.io/ridecell-1/ridecell-operator:1584-922dc2f-master
+        image: us.gcr.io/ridecell-1/ridecell-operator:2029-00e3d8a-master
         command: [/ridecell-operator, -v, "4", -logtostderr]
         resources:
           limits:
