@@ -54,7 +54,7 @@ rules:
 - apiGroups: [summon.ridecell.io]
   resources: [djangousers, djangousers/status]
   verbs: ["*"]
-- apiGroups: [secrets.ridecell.io, db.ridecell.io, aws.ridecell.io]
+- apiGroups: [secrets.ridecell.io, db.ridecell.io, aws.ridecell.io, monitoring.ridecell.io]
   resources: ["*"]
   verbs: ["*"]
 - apiGroups: [apiextensions.k8s.io]
