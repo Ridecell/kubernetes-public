@@ -26,15 +26,15 @@ metadata:
   name: ridecell-operator-webui
 rules:
 - apiGroups: [""]
-  resources: [pods]
+  resources: ["pods"]
   verbs: ["get", "list"]
-- apiGroups: [apps]
-  resources: [deployments]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
   verbs: ["get", "list"]
-- apiGroups: [summon.ridecell.io]
+- apiGroups: ["summon.ridecell.io"]
   resources: ["*"]
   verbs: ["get", "list"]
-- apiGroups: [db.ridecell.io]
+- apiGroups: ["db.ridecell.io"]
   resources: ["*"]
   verbs: ["get", "list"]
 ---
