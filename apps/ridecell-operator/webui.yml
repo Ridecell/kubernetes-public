@@ -26,7 +26,7 @@ metadata:
   name: ridecell-operator-webui
 rules:
 - apiGroups: [""]
-  resources: ["pods"]
+  resources: ["pods", "namespaces"]
   verbs: ["get", "list"]
 - apiGroups: ["apps"]
   resources: ["deployments"]
