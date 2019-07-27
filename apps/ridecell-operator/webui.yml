@@ -117,7 +117,7 @@ spec:
           serviceName: ridecell-operator-webui
           servicePort: 3000
   tls:
-  - secretName: ridecell-operator-webui
+  - secretName: ridecell-operator-webui-tls
     hosts:
     - hostname
 ---
