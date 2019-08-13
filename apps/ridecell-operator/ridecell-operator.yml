@@ -31,7 +31,7 @@ metadata:
   name: ridecell-operator
 rules:
 - apiGroups: [""]
-  resources: [configmaps, events, services, secrets]
+  resources: [configmaps, events, services, secrets, persistentvolumeclaims ]
   verbs: ["*"]
 - apiGroups: [""]
   resources: [pods]
