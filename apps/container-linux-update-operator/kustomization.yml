@@ -1,0 +1,6 @@
+resources:
+- namespace.yml
+
+bases:
+- agent/
+- operator/

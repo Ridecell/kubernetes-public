@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: update-operator
+  namespace: cluo
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: update-operator
+subjects:
+  - kind: ServiceAccount
+    namespace: cluo
+    name: update-operator

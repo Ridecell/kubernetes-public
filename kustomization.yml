@@ -1,6 +1,7 @@
 bases:
 - apps/cert-manager/
 - apps/cluster-autoscaler/
+- apps/container-linux-update-operator/
 - apps/external-dns/
 - apps/github-authn/
 - apps/metrics-server/

@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: container-linux-update-agent
+rules:
+  - apiGroups: [""]
+    resources: [nodes]
+    verbs: [get, list, watch, update]
+  - apiGroups: [""]
+    resources: [pods]
+    verbs: [get, list, delete]
+  - apiGroups: [extensions] # This is used by drain.go but the value is discarded. Shrug.gif.
+    resources: [daemonsets]
+    verbs: [get]
