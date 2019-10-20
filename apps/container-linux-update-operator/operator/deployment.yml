@@ -11,6 +11,9 @@ spec:
         app: container-linux-update-operator
     spec:
       serviceAccount: update-operator
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
       containers:
       - name: update-operator
         image: quay.io/coreos/container-linux-update-operator:v0.7.0
