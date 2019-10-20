@@ -1,5 +1,6 @@
 resources:
 - namespace.yml
+- network-policy.yml
 
 bases:
 - agent/
