@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: update-agent
+  namespace: cluo
+spec:
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: container-linux-update-agent
+    spec:
+      serviceAccount: update-agent
+      securityContext:
+        runAsUser: 65534
+        runAsGroup: 65534
+      containers:
+      - name: default
+        image: quay.io/coreos/container-linux-update-operator:v0.7.0
+        command:
+        - "/bin/update-agent"
+        env:
+        # read by update-agent as the node name to manage reboots for
+        - name: UPDATE_AGENT_NODE
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        volumeMounts:
+          - mountPath: /var/run/dbus
+            name: var-run-dbus
+          - mountPath: /etc/coreos
+            name: etc-coreos
+          - mountPath: /usr/share/coreos
+            name: usr-share-coreos
+          - mountPath: /etc/os-release
+            name: etc-os-release
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      volumes:
+      - name: var-run-dbus
+        hostPath:
+          path: /var/run/dbus
+      - name: etc-coreos
+        hostPath:
+          path: /etc/coreos
+      - name: usr-share-coreos
+        hostPath:
+          path: /usr/share/coreos
+      - name: etc-os-release
+        hostPath:
+          path: /etc/os-release
