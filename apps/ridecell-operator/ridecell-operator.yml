@@ -58,7 +58,7 @@ rules:
   resources: ["*"]
   verbs: [get, list, watch, update]
 - apiGroups: [summon.ridecell.io]
-  resources: [djangousers, djangousers/status]
+  resources: [mockcarservertenants, djangousers, djangousers/status]
   verbs: ["*"]
 - apiGroups: [secrets.ridecell.io, db.ridecell.io, aws.ridecell.io, monitoring.ridecell.io, ingress.ridecell.io, gcp.ridecell.io]
   resources: ["*"]
