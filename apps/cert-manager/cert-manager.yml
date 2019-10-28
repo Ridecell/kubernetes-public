@@ -65,7 +65,6 @@ spec:
   selector:
     matchLabels:
       app: cert-manager
-      release: cert-manager
   template:
     metadata:
       labels:
