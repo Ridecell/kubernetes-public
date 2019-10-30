@@ -86,7 +86,6 @@ spec:
           - --leader-election-namespace=$(POD_NAMESPACE)
           - --default-issuer-name=letsencrypt-staging
           - --default-issuer-kind=ClusterIssuer
-          - --default-acme-issuer-challenge-type=http01
           ports:
           - containerPort: 9402
           env:
