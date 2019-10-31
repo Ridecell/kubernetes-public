@@ -78,7 +78,7 @@ metadata:
 spec:
   selector:
     app: external-dns-cf
- clusterIP: None
+  clusterIP: None
 ---
 apiVersion: apps/v1
 kind: StatefulSet
