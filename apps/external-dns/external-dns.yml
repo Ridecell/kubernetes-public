@@ -70,15 +70,15 @@ spec:
     app: external-dns-aws
   clusterIP: None
 ---
-# kind: Service
-# apiVersion: v1
-# metadata:
-#   name: external-dns-cf
-#   namespace: external-dns
-# spec:
-#   selector:
-#     app: external-dns-cf
-#   clusterIP: None
+kind: Service
+apiVersion: v1
+metadata:
+  name: external-dns-cf
+  namespace: external-dns
+spec:
+  selector:
+    app: external-dns-cf
+ clusterIP: None
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -148,6 +148,74 @@ spec:
   # Workaround for https://github.com/kubernetes-sigs/kustomize/issues/677
   volumeClaimTemplates: []
 ---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: external-dns-cf
+  namespace: external-dns
+  labels:
+    app: external-dns-cf
+spec:
+  selector:
+    matchLabels:
+      app: external-dns-cf
+  serviceName: external-dns-cf
+  template:
+    metadata:
+      labels:
+        app: external-dns-cf
+    spec:
+      serviceAccountName: external-dns
+      containers:
+      - name: default
+        image: registry.opensource.zalan.do/teapot/external-dns:v0.5.8
+        imagePullPolicy: Always
+        ports:
+        - name: metrics
+          containerPort: 7979
+        args:
+        - --interval=5m
+        - --source=ingress
+        - --domain-filter=ridecell.com
+        - --provider=cloudflare
+        - --cloudflare-proxied
+        - --policy=upsert-only
+        - --registry=txt
+        - --txt-owner-id=extdns-$(RIDECELL_CLOUD)-$(RIDECELL_REGION)-$(RIDECELL_ENVIRONMENT)
+        - --txt-prefix=ridecell- # Just to make it slightly harder to tell that we are using externaldns from the outside
+        env:
+        - name: CF_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: external-dns
+              key: CF_API_KEY
+        - name: CF_API_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: external-dns
+              key: CF_API_EMAIL
+        - name: RIDECELL_ENVIRONMENT
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['ridecell.io/environment']
+        - name: RIDECELL_REGION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['ridecell.io/region']
+        - name: RIDECELL_CLOUD
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['ridecell.io/cloud']
+        resources:
+          requests:
+            cpu: 100m
+            memory: 32Mi
+          limits:
+            cpu: 100m
+            memory: 64Mi
+  # Workaround for https://github.com/kubernetes-sigs/kustomize/issues/677
+  volumeClaimTemplates: []
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -158,6 +226,21 @@ metadata:
 spec:
   selector:
     app: external-dns-aws
+  ports:
+    - port: 7979
+      targetPort: 7979
+      name: metrics
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-dns-cf-metrics
+  namespace: external-dns
+  labels:
+    app: external-dns-cf-metrics
+spec:
+  selector:
+    app: external-dns-cf
   ports:
     - port: 7979
       targetPort: 7979
@@ -175,6 +258,23 @@ spec:
   selector:
     matchLabels:
       app: external-dns-aws-metrics
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: external-dns-cf
+  namespace: external-dns
+  labels:
+    k8s-app: external-dns-cf
+    monitoredBy: prometheus-infra
+spec:
+  selector:
+    matchLabels:
+      app: external-dns-cf-metrics
   endpoints:
   - port: metrics
     interval: 30s
