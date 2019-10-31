@@ -24,9 +24,21 @@ spec:
     server: https://acme-staging-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-staging-issuer-account-key
-    dns01:
-      providers:
-      - name: route53
+    solvers:
+    - selector:
+        dnsZones:
+        - "ridecell.com"
+      dns01:
+        cloudflare:
+          email: devops@ridecell.com
+          apiKeySecretRef:
+            name: cloudflare
+            key: api-key
+    - selector:
+        dnsZones:
+        - "ridecell.us"
+        - "ridecell.io"
+      dns01:
         route53:
           region: us-west-2
           accessKeyID: FILLMEIN
@@ -44,9 +56,21 @@ spec:
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: letsencrypt-prod-issuer-account-key
-    dns01:
-      providers:
-      - name: route53
+    solvers:
+    - selector:
+        dnsZones:
+        - "ridecell.com"
+      dns01:
+        cloudflare:
+          email: devops@ridecell.com
+          apiKeySecretRef:
+            name: cloudflare
+            key: api-key
+    - selector:
+        dnsZones:
+        - "ridecell.us"
+        - "ridecell.io"
+      dns01:
         route53:
           region: us-west-2
           accessKeyID: FILLMEIN
