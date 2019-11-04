@@ -333,8 +333,6 @@ spec:
   selector:
     matchLabels:
       app: cert-manager
-      app.kubernetes.io/name: cert-manager
-      app.kubernetes.io/instance:  cert-manager
   template:
     metadata:
       labels:
