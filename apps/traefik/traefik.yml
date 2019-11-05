@@ -101,7 +101,7 @@ data:
     publishedService = "traefik/traefik"
 
     [metrics.prometheus]
-        
+
     [api]
 ---
 apiVersion: apps/v1
@@ -141,7 +141,7 @@ spec:
                   app: traefik
       containers:
       - name: default
-        image: traefik:1.7.7
+        image: traefik:1.7.19
         ports:
         - name: http
           containerPort: 8080
