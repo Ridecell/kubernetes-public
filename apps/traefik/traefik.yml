@@ -64,6 +64,8 @@ data:
     logLevel = "INFO"
     insecureSkipVerify = true
 
+    [accessLog]
+
     [entryPoints.http]
     address = ":8080"
     compress = true
