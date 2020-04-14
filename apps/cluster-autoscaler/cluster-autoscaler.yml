@@ -1,5 +1,5 @@
 #
-# Copyright 2019, Ridecell, Inc.
+# Copyright 2020, Ridecell, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ metadata:
   name: cluster-autoscaler
   namespace: kube-system
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: cluster-autoscaler
@@ -57,10 +57,17 @@ rules:
   resources: [replicasets, statefulsets, daemonsets]
   verbs: [watch, list, get]
 - apiGroups: [storage.k8s.io]
-  resources: [storageclasses]
+  resources: [storageclasses, csinodes]
   verbs: [watch, list, get]
+- apiGroups: [coordination.k8s.io]
+  resources: [leases]
+  verbs: [create]
+- apiGroups: [coordination.k8s.io]
+  resourceNames: [cluster-autoscaler]
+  resources: [leases]
+  verbs: [get, update]
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: cluster-autoscaler
@@ -73,7 +80,7 @@ subjects:
   name: cluster-autoscaler
   namespace: kube-system
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: cluster-autoscaler
@@ -87,7 +94,7 @@ rules:
     resourceNames: [cluster-autoscaler-status]
     verbs: [delete, get, update]
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: cluster-autoscaler
@@ -124,7 +131,7 @@ spec:
         node-role.kubernetes.io/master: ""
       containers:
       - name: default
-        image: k8s.gcr.io/cluster-autoscaler:v1.13.2
+        image: us.gcr.io/k8s-artifacts-prod/autoscaling/cluster-autoscaler:v1.17.2
         command:
         - ./cluster-autoscaler
         - --cloud-provider=aws
