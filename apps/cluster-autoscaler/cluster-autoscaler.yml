@@ -141,6 +141,7 @@ spec:
         - --v=4
         - --stderrthreshold=info
         - --logtostderr=true
+        - --skip-nodes-with-local-storage=false
         env:
         - name: AWS_REGION
           valueFrom:
