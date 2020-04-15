@@ -88,7 +88,7 @@ metadata:
 rules:
   - apiGroups: [""]
     resources: [configmaps]
-    verbs: [create]
+    verbs: [create, list, watch]
   - apiGroups: [""]
     resources: [configmaps]
     resourceNames: [cluster-autoscaler-status]
@@ -137,10 +137,11 @@ spec:
         - --cloud-provider=aws
         - --namespace=kube-system
         - --node-group-auto-discovery=asg:tag=KubernetesCluster=$(CLUSTER_NAME)
-        - --expander=most-pods
+        - --expander=priority
         - --v=4
         - --stderrthreshold=info
         - --logtostderr=true
+        - --skip-nodes-with-local-storage=false
         env:
         - name: AWS_REGION
           valueFrom:
@@ -163,8 +164,17 @@ spec:
         resources:
           limits:
             cpu: 100m
-            memory: 300Mi
+            memory: 400Mi
           requests:
             cpu: 100m
-            memory: 300Mi
+            memory: 400Mi
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-autoscaler-priority-expander
+  namespace: kube-system
+data:
+  priorities: |-
+    10:
+      - .*
