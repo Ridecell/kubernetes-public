@@ -129,6 +129,8 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.labels['ridecell.io/cluster-name']
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /var/run/secrets/gcp-service-account/google_service_account.json
         envFrom:
         - secretRef:
             name: ridecell-operator
