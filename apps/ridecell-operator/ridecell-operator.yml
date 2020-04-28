@@ -132,6 +132,14 @@ spec:
         envFrom:
         - secretRef:
             name: ridecell-operator
+        volumeMounts:
+        - name: secrets
+          mountPath: /var/run/secrets/gcp-service-account/google_service_account.json
+          subPath: GOOGLE_SERVICE_ACCOUNT_KEY
+      volumes:
+      - name: secrets
+        secret:
+          secretName: ridecell-operator
       terminationGracePeriodSeconds: 10
 ---
 # apiVersion: v1
